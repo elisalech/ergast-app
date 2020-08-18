@@ -1,12 +1,12 @@
 import React from 'react';
-import {View, Text, StyleSheet, Linking} from 'react-native';
-import {Result} from '../interfaces';
+import { View, Text, StyleSheet, Linking } from 'react-native';
+import { Result } from '../interfaces';
 
 type Props = {
   result: Result;
 };
 
-export default ({result}: Props) => (
+export default ({ result }: Props) => (
   <View style={styles.container}>
     <View style={styles.row}>
       <Text>Position:</Text>
@@ -28,7 +28,7 @@ export default ({result}: Props) => (
       <Text>Status:</Text>
       <Text>{result.status}</Text>
     </View>
-    <View style={{...styles.row, borderBottomWidth: 0}}>
+    <View style={{ ...styles.row, borderBottomWidth: 0 }}>
       <Text>Constructor:</Text>
       <View style={styles.constructorWrap}>
         <Text>{result.Constructor.nationality}, </Text>

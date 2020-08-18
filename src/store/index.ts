@@ -1,21 +1,23 @@
-import {combineReducers, createStore, applyMiddleware} from 'redux';
+import { combineReducers, createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
-import {createLogger} from 'redux-logger';
-import {persistStore, persistReducer} from 'redux-persist';
+import { createLogger } from 'redux-logger';
+import { persistStore, persistReducer } from 'redux-persist';
 import AsyncStorage from '@react-native-community/async-storage';
 
 import drivers from './drivers';
 import pageConfig from './pageConfig';
 import races from './races';
+import errors from './errors';
 
 const rootReducer = combineReducers({
   drivers,
   pageConfig,
   races,
+  errors,
 });
 
 const persistConfig = {
-  key: 'root_main',
+  key: 'root_new',
   storage: AsyncStorage,
 };
 

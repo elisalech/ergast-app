@@ -1,6 +1,6 @@
-import {ThunkAction} from 'redux-thunk';
-import {Action} from 'redux';
-import {RootState} from '../store';
+import { ThunkAction } from 'redux-thunk';
+import { Action } from 'redux';
+import { RootState } from '../store';
 
 export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
@@ -54,20 +54,6 @@ type RaceTableType = {
   driverId: string;
   Races: Race[];
 };
-
-export interface State {
-  pageConfig: {
-    driversLoading: boolean;
-    racesLoading: boolean;
-    pageDriversNum: number;
-    pageResultsNum: number;
-    maxDrivers: number;
-    maxRaces: number;
-    driverId: string | null;
-  };
-  drivers: Driver[][];
-  races: Race[][];
-}
 
 export interface Race {
   season: string;

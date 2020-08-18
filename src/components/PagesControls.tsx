@@ -1,7 +1,14 @@
 import React from 'react';
-import {View, Text, StyleSheet, Button} from 'react-native';
+import { View, Text, StyleSheet, Button } from 'react-native';
 
-export default ({counter, handlePrev, handleNext, max}: any) => (
+interface Props {
+  counter: number;
+  handlePrev: () => void;
+  handleNext: () => void;
+  max: number;
+}
+
+export default ({ counter, handlePrev, handleNext, max }: Props) => (
   <View style={styles.pagesControlsWrap}>
     <Button title="Prev" onPress={handlePrev} />
     <Text>

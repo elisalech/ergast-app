@@ -1,8 +1,18 @@
 import React from 'react';
-import {useSelector, useDispatch} from 'react-redux';
-import {View, Text, StyleSheet, TouchableOpacity, Linking} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Linking,
+} from 'react-native';
+import {
+  NavigationParams,
+  NavigationScreenProp,
+  NavigationState,
+} from 'react-navigation';
 
-import {Driver} from '../interfaces';
+import { Driver } from '../interfaces';
 
 type DriverScreenProps = {
   route: {
@@ -10,12 +20,12 @@ type DriverScreenProps = {
       driver: Driver;
     };
   };
-  navigation: any;
+  navigation: NavigationScreenProp<NavigationState, NavigationParams>;
 };
 
 export default function DriverScreen({
   route: {
-    params: {driver},
+    params: { driver },
   },
   navigation,
 }: DriverScreenProps) {
@@ -46,7 +56,7 @@ export default function DriverScreen({
       <View style={styles.buttonWrap}>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('Results', {driverId: driver.driverId});
+            navigation.navigate('Results', { driverId: driver.driverId });
           }}
           style={styles.resultsButton}>
           <Text style={styles.buttonText}>See race results</Text>

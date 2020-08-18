@@ -1,4 +1,4 @@
-import {Driver} from './interfaces';
+import { Driver } from './interfaces';
 
 export const driversMock: Driver[] = [
   {

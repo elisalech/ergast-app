@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   View,
   Text,
@@ -7,32 +7,39 @@ import {
   FlatList,
   ActivityIndicator,
 } from 'react-native';
-import {State} from '../interfaces';
 import getDriversByPage from '../requests/getDriversByPage';
-import {
-  DECREMENT_DRIVERS_PAGE_NUM,
-  INCREMENT_DRIVERS_PAGE_NUM,
-} from '../store/pageConfig/actions';
+
 import DriverLine from '../components/DriverLine';
 import PagesControls from '../components/PagesControls';
+import { RootState } from '../store';
+import { decreaseDriversPageNum, increaseDriversPageNum } from '../actions';
+import ErrorHandler from '../components/ErrorHandler';
 
-export default function DriversScreen({navigation}: any) {
+export default function DriversScreen({ navigation }: any) {
+  const dispatch = useDispatch();
   const counter = useSelector(
-    (state: State) => state.pageConfig.pageDriversNum,
+    (state: RootState) => state.drivers.pageDriversNum,
   );
 
   const isLoading = useSelector(
-    (state: State) => state.pageConfig.driversLoading,
+    (state: RootState) => state.pageConfig.driversLoading,
   );
-  const max = useSelector((state: State) => state.pageConfig.maxDrivers);
-  const pageDrivers = useSelector((state: State) => state.drivers[counter - 1]);
-  const dispatch = useDispatch();
+  const max = useSelector((state: RootState) => state.drivers.maxDrivers);
+  const pageDrivers = useSelector(
+    (state: RootState) => state.drivers.list[counter - 1],
+  );
+
+  const isError = useSelector((state: RootState) => state.errors.isError);
 
   useEffect(() => {
     if (!pageDrivers) {
       dispatch(getDriversByPage(counter));
     }
   }, [counter, dispatch, pageDrivers]);
+
+  if (isError) {
+    return <ErrorHandler />;
+  }
 
   return (
     <View style={styles.container}>
@@ -45,7 +52,7 @@ export default function DriversScreen({navigation}: any) {
       ) : (
         <FlatList
           data={pageDrivers}
-          renderItem={({item}: any) => (
+          renderItem={({ item }: any) => (
             <DriverLine item={item} navigation={navigation} />
           )}
           keyExtractor={(item) => item.driverId}
@@ -54,10 +61,10 @@ export default function DriversScreen({navigation}: any) {
 
       <PagesControls
         handlePrev={() => {
-          dispatch({type: DECREMENT_DRIVERS_PAGE_NUM});
+          dispatch(decreaseDriversPageNum());
         }}
         handleNext={() => {
-          dispatch({type: INCREMENT_DRIVERS_PAGE_NUM});
+          dispatch(increaseDriversPageNum());
         }}
         max={max}
         counter={counter}

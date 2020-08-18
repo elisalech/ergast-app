@@ -1,15 +1,13 @@
-import React, {useEffect} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
-import {View, StyleSheet, FlatList, ActivityIndicator} from 'react-native';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { View, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
 
-import {State} from '../interfaces';
 import getDriverResults from '../requests/getDriverResults';
 import RaceItem from '../components/RaceItem';
 import PagesControls from '../components/PagesControls';
-import {
-  INCREMENT_RESULTS_PAGE_NUM,
-  DECREMENT_RESULTS_PAGE_NUM,
-} from '../store/pageConfig/actions';
+import { RootState } from '../store';
+import { decreaseDriversPageNum, increaseDriversPageNum } from '../actions';
+import ErrorHandler from '../components/ErrorHandler';
 
 type ResultsScreenProps = {
   route: {
@@ -21,20 +19,20 @@ type ResultsScreenProps = {
 
 export default function ResultsScreen({
   route: {
-    params: {driverId},
+    params: { driverId },
   },
 }: ResultsScreenProps) {
-  const counter = useSelector(
-    (state: State) => state.pageConfig.pageResultsNum,
-  );
-
-  const isLoading = useSelector(
-    (state: State) => state.pageConfig.racesLoading,
-  );
-  const prevDriverId = useSelector((state: State) => state.pageConfig.driverId);
-  const max = useSelector((state: State) => state.pageConfig.maxRaces);
-  const pageRaces = useSelector((state: State) => state.races[counter - 1]);
   const dispatch = useDispatch();
+  const counter = useSelector((state: RootState) => state.races.pageResultsNum);
+  const isLoading = useSelector(
+    (state: RootState) => state.pageConfig.racesLoading,
+  );
+  const prevDriverId = useSelector((state: RootState) => state.races.driverId);
+  const max = useSelector((state: RootState) => state.races.maxRaces);
+  const pageRaces = useSelector(
+    (state: RootState) => state.races.list[counter - 1],
+  );
+  const isError = useSelector((state: RootState) => state.errors.isError);
 
   useEffect(() => {
     if (!pageRaces || prevDriverId !== driverId) {
@@ -42,22 +40,25 @@ export default function ResultsScreen({
     }
   }, [counter, dispatch, pageRaces, driverId, prevDriverId]);
 
+  if (isError) {
+    return <ErrorHandler />;
+  }
+
   return (
     <View style={styles.container}>
-      <View style={{display: 'none'}}></View>
+      <View style={{ display: 'none' }} />
       {isLoading ? (
         <ActivityIndicator />
       ) : (
         <FlatList
           data={pageRaces}
-          renderItem={({item}: any) => <RaceItem item={item} />}
+          renderItem={({ item }: any) => <RaceItem item={item} />}
           keyExtractor={(item) => item.date}
         />
       )}
       <PagesControls
-        handlePrev={() => dispatch({type: DECREMENT_RESULTS_PAGE_NUM})}
-        handleNext={() => dispatch({type: INCREMENT_RESULTS_PAGE_NUM})}
-        han
+        handlePrev={() => dispatch(decreaseDriversPageNum())}
+        handleNext={() => dispatch(increaseDriversPageNum())}
         counter={counter}
         max={max}
       />

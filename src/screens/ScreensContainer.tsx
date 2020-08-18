@@ -1,6 +1,6 @@
 import React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import DriversScreen from './DriversScreen';
 import DriverScreen from './DriverScreen';
 import ResultsScreen from './ResultsScreen';

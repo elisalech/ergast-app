@@ -1,33 +1,39 @@
 import axios from 'axios';
-import {DriversResponse, AppThunk} from '../interfaces';
-import {SET_DRIVERS} from '../store/drivers/actions';
+import { DriversResponse, AppThunk } from '../interfaces';
+
 import {
-  DRIVERS_LOADING_TRUE,
-  DRIVERS_LOADING_FALSE,
-  SET_MAX_DRIVERS,
-} from '../store/pageConfig/actions';
+  driversLoadingTrue,
+  driversLoadingFalse,
+  setDrivers,
+  setMaxDrivers,
+  toggleErrorTrue,
+  setErrorMessage,
+} from '../actions';
 
 const BY_PAGE: number = 30;
 
 export default (pageNumber: number): AppThunk => async (dispatch) => {
-  dispatch({type: DRIVERS_LOADING_TRUE});
+  dispatch(driversLoadingTrue());
   const offset: number = BY_PAGE * pageNumber - 30;
 
-  const res = await axios.post(
-    `http://ergast.com/api/f1/drivers.json?offset=${offset}`,
-  );
+  try {
+    const res = await axios.post(
+      `http://ergast.co/api/f1/drivers.json?offset=${offset}`,
+    );
 
-  const driversData: DriversResponse = res.data;
+    const driversData: DriversResponse = res.data;
 
-  const total: number = Math.ceil(parseInt(driversData.MRData.total) / BY_PAGE);
+    const maxCountPage: number = Math.ceil(
+      parseInt(driversData.MRData.total) / BY_PAGE,
+    );
 
-  dispatch({type: SET_MAX_DRIVERS, max: total});
+    dispatch(setMaxDrivers(maxCountPage));
 
-  dispatch({
-    type: SET_DRIVERS,
-    pageNumber,
-    drivers: driversData.MRData.DriverTable.Drivers,
-  });
+    dispatch(setDrivers(pageNumber, driversData.MRData.DriverTable.Drivers));
+  } catch (e) {
+    dispatch(toggleErrorTrue());
+    dispatch(setErrorMessage(e.message));
+  }
 
-  dispatch({type: DRIVERS_LOADING_FALSE});
+  dispatch(driversLoadingFalse());
 };

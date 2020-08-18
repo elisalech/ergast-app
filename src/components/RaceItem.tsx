@@ -1,13 +1,13 @@
 import React from 'react';
-import {View, Text, StyleSheet, Linking} from 'react-native';
-import {Race} from '../interfaces';
+import { View, Text, StyleSheet, Linking } from 'react-native';
+import { Race } from '../interfaces';
 import ResultItem from './ResultItem';
 
 type Props = {
   item: Race;
 };
 
-export default ({item}: Props) => (
+export default ({ item }: Props) => (
   <View style={styles.container}>
     <View style={styles.row}>
       <Text>Race name:</Text>

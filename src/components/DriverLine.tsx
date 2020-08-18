@@ -1,12 +1,23 @@
 import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, Button} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Button } from 'react-native';
+import {
+  NavigationParams,
+  NavigationScreenProp,
+  NavigationState,
+} from 'react-navigation';
+import { Driver } from '../interfaces';
 
-export default ({item, navigation}: any) => (
+type Props = {
+  item: Driver;
+  navigation: NavigationScreenProp<NavigationState, NavigationParams>;
+};
+
+export default ({ item, navigation }: Props) => (
   <View style={styles.driverRow}>
     <TouchableOpacity
       style={styles.driverNamesWrap}
       onPress={() => {
-        navigation.navigate('Driver', {driver: item});
+        navigation.navigate('Driver', { driver: item });
       }}>
       <Text
         style={
@@ -16,7 +27,7 @@ export default ({item, navigation}: any) => (
     <Button
       title="results"
       onPress={() => {
-        navigation.navigate('Results', {driverId: item.driverId});
+        navigation.navigate('Results', { driverId: item.driverId });
       }}
     />
   </View>
